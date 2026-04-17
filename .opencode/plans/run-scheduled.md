@@ -59,7 +59,12 @@ run-scheduled:
 
 ## Status
 
-- [x] Step 1: Create CLI command skeleton
-- [ ] Step 2: Add Web API endpoint
-- [ ] Step 3: Implement core logic
-- [x] Step 4: Add tests (basic test passes)
+- [x] Step 1: Create CLI command - DONE (build passes, tests pass)
+- [ ] Step 2: Add Web API endpoint (skipped - existing /api/v1/sources/upload works)
+- [x] Step 3: Implement core logic (due/overdue detection using policy.NextSnapshotTime)
+- [x] Step 4: Add tests (TestSnapshotRunScheduled passes)
+
+## Next Steps
+
+- [ ] Add documentation for `kopia snapshot run-scheduled` command including usgae example how to schedule it regularily on Linux/Windows/MacOS
+- [ ] Improve tests to check that new snapshots are created for due tasks only
