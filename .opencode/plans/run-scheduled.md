@@ -64,7 +64,14 @@ run-scheduled:
 - [x] Step 3: Implement core logic (due/overdue detection using policy.NextSnapshotTime)
 - [x] Step 4: Add tests (TestSnapshotRunScheduled passes)
 
+All Next Steps COMPLETED:
+- [x] CLI reference page: `site/content/docs/Reference/Command-Line/snapshot-run-scheduled/_index.md`
+- [x] Scheduling howto: `site/content/docs/Advanced/scheduling-automated-backups/_index.md`
+- [x] Tests updated
+
 ## Next Steps
 
-- [ ] Add documentation for `kopia snapshot run-scheduled` command including usgae example how to schedule it regularily on Linux/Windows/MacOS
-- [ ] Improve tests to check that new snapshots are created for due tasks only
+- [x] Add CLI documentation for `kopia snapshot run-scheduled` command - in the CLI reference section but also for the CLI `--help` commend
+- [x] Add documentation for `kopia snapshot run-scheduled` command including usage example how to schedule it regularily on Linux/Windows/MacOS
+- [x] In the documentation on how to schedule the task, list different options with examples how to use it, e.g for Linux cron, systemd unit & timer, and other popular options
+- [x] Improve tests to check that new snapshots are created for due tasks only

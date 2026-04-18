@@ -31,9 +31,11 @@ func TestSnapshotRunScheduled(t *testing.T) {
 
 	e.RunAndExpectSuccess(t, "snapshot", "create", srcdir)
 
-	e.RunAndExpectSuccess(t, "snapshot", "run-scheduled", "--dry-run")
+	e.RunAndExpectSuccess(t, "snapshot", "list", srcdir)
 
-	e.RunAndExpectSuccess(t, "snapshot", "run-scheduled", "--parallel=2")
+	e.RunAndExpectSuccess(t, "snapshot", "create-scheduled", "--dry-run")
+
+	e.RunAndExpectSuccess(t, "snapshot", "create-scheduled", "--parallel=2")
 
 	e.RunAndExpectSuccess(t, "snapshot", "list", srcdir)
 }

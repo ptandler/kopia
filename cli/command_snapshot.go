@@ -1,19 +1,19 @@
 package cli
 
 type commandSnapshot struct {
-	copyHistory      commandSnapshotCopyMoveHistory
-	moveHistory    commandSnapshotCopyMoveHistory
-	create         commandSnapshotCreate
-	delete         commandSnapshotDelete
-	estimate       commandSnapshotEstimate
-	expire         commandSnapshotExpire
-	fix            commandSnapshotFix
-	list           commandSnapshotList
-	migrate        commandSnapshotMigrate
-	pin            commandSnapshotPin
-	restore        commandSnapshotRestore
-	runScheduled   commandSnapshotRunScheduled
-	verify         commandSnapshotVerify
+	copyHistory     commandSnapshotCopyMoveHistory
+	moveHistory     commandSnapshotCopyMoveHistory
+	create          commandSnapshotCreate
+	delete          commandSnapshotDelete
+	estimate        commandSnapshotEstimate
+	expire          commandSnapshotExpire
+	fix             commandSnapshotFix
+	list            commandSnapshotList
+	migrate         commandSnapshotMigrate
+	pin             commandSnapshotPin
+	restore         commandSnapshotRestore
+	createScheduled commandSnapshotCreateScheduled
+	verify          commandSnapshotVerify
 }
 
 func (c *commandSnapshot) setup(svc advancedAppServices, parent commandParent) {
@@ -29,6 +29,6 @@ func (c *commandSnapshot) setup(svc advancedAppServices, parent commandParent) {
 	c.migrate.setup(svc, cmd)
 	c.pin.setup(svc, cmd)
 	c.restore.setup(svc, cmd)
-	c.runScheduled.setup(svc, cmd)
+	c.createScheduled.setup(svc, cmd)
 	c.verify.setup(svc, cmd)
 }
