@@ -67,7 +67,7 @@ Examples for different schedules:
 
 3. Save and exit.
 
-### Option 2: Systemd Timers
+### Option 2: Systemd Timers (user-level, recommended)
 
 1. Create the service file at `~/.config/systemd/user/kopia-snapshot.service`:
 ```ini
@@ -83,10 +83,10 @@ Environment=KOPIA_PASSWORD=yourpassword
 2. Create the timer file at `~/.config/systemd/user/kopia-snapshot.timer`:
 ```ini
 [Unit]
-Description=Run Kopia snapshots daily
+Description=Run Kopia snapshots hourly
 
 [Timer]
-OnCalendar=*-*-* 02:00:00
+OnCalendar=*-*-* *:00:00
 Persistent=true
 
 [Install]
@@ -99,6 +99,47 @@ systemctl --user daemon-reload
 systemctl --user enable --now kopia-snapshot.timer
 ```
 
+### Option 3: Systemd (system-wide service)
+
+For running as a system service (all users), create files in `/etc/systemd/system/`:
+
+1. Create `/etc/systemd/system/kopia-snapshot.service`:
+```ini
+[Unit]
+Description=Kopia Scheduled Snapshots
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=yourusername
+ExecStart=/usr/bin/nice -n 15 /usr/bin/ionice -c 3 /usr/local/bin/kopia snapshot create-scheduled
+Environment=KOPIA_PASSWORD=yourpassword
+```
+
+2. Create `/etc/systemd/system/kopia-snapshot.timer`:
+```ini
+[Unit]
+Description=Run Kopia snapshots hourly
+
+[Timer]
+OnCalendar=*-*-* *:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+3. Enable and start:
+```shell
+sudo systemctl daemon-reload
+sudo systemctl enable --now kopia-snapshot.timer
+```
+
+**Important: Use the same user** that created and owns the Kopia repository:
+- Set `User=yourusername` in the service file
+- The repository config is typically in `~/.config/kopia/`
+- If a different user runs the backup, it won't find the repository
+
 Other schedule options for `OnCalendar`:
 
 | Schedule | OnCalendar Value |
@@ -109,7 +150,7 @@ Other schedule options for `OnCalendar`:
 | Weekly on Sunday at 3 AM | `Sun *-*-* 03:00:00` |
 | First day of month at midnight | `*-*-01 00:00:00` |
 
-### Option 3: fcron
+### Option 4: fcron
 
 For more advanced scheduling (e.g., "every 4 hours on weekdays"):
 ```shell
@@ -126,7 +167,10 @@ Running backup tasks with low priority is important because backup operations ar
 nice -n 15 /usr/local/bin/kopia snapshot create-scheduled
 ```
 
-macOS does not have `ionice`, but you can use third-party tools like `iopriority` from [DarwinPorts](https://www.macports.org/) if needed.
+- macOS does not have `ionice` - I/O scheduling is handled by the OS automatically
+- `nice -n 15` lowers CPU priority
+
+For more aggressive throttling on macOS, consider third-party tools like `iopriority` from [DarwinPorts](https://www.macports.org/).
 
 ### Option 1: launchd
 
@@ -173,7 +217,7 @@ Same as Linux cron instructions above.
 
 ### Running with Low Priority
 
-Running backup tasks with low priority is important because backup operations are I/O-intensive and can slow down other processes. Windows handles this differently than Linux/macOS:
+Running backup tasks with low priority is important because backup operations are I/O-intensive and can slow down other processes. Windows handles I/O automatically; you mainly control CPU priority:
 
 1. **Using Task Scheduler** (recommended):
    - Windows tasks run at normal priority by default, which is usually fine
@@ -189,6 +233,9 @@ $process.PriorityClass = 'BelowNormal'
 ```batch
 start /low /b "" "C:\Program Files\Kopia\kopia.exe" snapshot create-scheduled
 ```
+
+- Windows I/O scheduling is automatic - the OS handles background task priority
+- Only CPU priority needs explicit lowering if desired
 
 ### Option 1: Task Scheduler (GUI)
 
