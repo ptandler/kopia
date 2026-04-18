@@ -1,6 +1,6 @@
 ---
-title: "kopia snapshot run-scheduled"
-linkTitle: "snapshot run-scheduled"
+title: "kopia snapshot create-scheduled"
+linkTitle: "snapshot create-scheduled"
 weight: 30
 ---
 
@@ -9,12 +9,12 @@ weight: 30
 ## Synopsis
 
 ```shell
-kopia snapshot run-scheduled [<flags>]
+kopia snapshot create-scheduled [<flags>]
 ```
 
 ## Description
 
-The `run-scheduled` command checks each configured snapshot source against its schedule policy and runs snapshots that are due or overdue. It respects the scheduling policy defined for each source, including intervals, times of day, and day-of-week settings.
+The `create-scheduled` command (alias: `run-scheduled`) checks each configured snapshot source against its schedule policy and runs snapshots that are due or overdue. It respects the scheduling policy defined for each source, including intervals, times of day, and day-of-week settings.
 
 This command is useful for:
 - Running automated backups on a schedule (via cron, systemd timers, or task schedulers)
